@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>p5js Template</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.3/p5.js"></script>
+
+    <script>
+        var num1, num2, num3, num4;
+        var x, y;
+        var point;
+        var s, sChange;
+        var time;
+
+        function setup() {
+            //activcation
+            createCanvas(800, 600);
+            point = 0; //points
+            textSize(20);
+            sChange = 1; //
+            s = 3600; //set my time counter
+            //reset
+            background(0);
+            fill(0);
+            //text for points
+            text("Points: " + point, 50, 50);
+            //rectanges
+            x = width / 2;
+            y = height / 4
+            fill(255);
+            rectMode(CENTER);
+            rect(x, y, 300, 100);
+            rect(x, y * 2, 300, 100);
+            rect(x, y * 3 + 50, 300, 100);
+            //numbers generator
+            num1 = round(random(12));
+            num2 = round(random(12));
+            num3 = round(random(12));
+            num4 = round(random(12));
+            //writing out the text
+            fill(0);
+            textSize(70);
+            text(num1 + "*" + num2, x - 70, y + 25);
+            text(num3 + "*" + num4, x - 70, y + 180);
+            text("EQUAL", x - 110, y * 3.5);
+        }
+        //the same copy as setup(without createCanvas and others) to let code run after the function is fixed
+        function refresh() {
+            background(200);
+            textSize(20);
+            text("Points: " + point, 50, 50);
+            x = width / 2;
+            y = height / 4
+            fill(255);
+            rectMode(CENTER);
+            rect(x, y, 300, 100);
+            rect(x, y * 2, 300, 100);
+            rect(x, y * 3 + 50, 300, 100);
+
+            num1 = round(random(12));
+            num2 = round(random(12));
+            num3 = round(random(12));
+            num4 = round(random(12));
+
+            fill(0);
+            textSize(70);
+            text(num1 + "*" + num2, x - 70, y + 25);
+            text(num3 + "*" + num4, x - 70, y + 180);
+            text("EQUAL", x - 110, y * 3.5);
+        }
+
+        function draw() {
+            //decrease my time counter
+            s -= sChange;
+            //text for time
+            background(200);
+            textSize(20);
+            text("Points: " + point, 50, 50);
+            text("time left: " + round(s / 60), 50, 100);
+            text("Press the bigger value, if they are equal press 'equal'", 200, 50);
+            //constantly show the rectangle
+            fill(255);
+            rect(x, y, 300, 100);
+            rect(x, y * 2, 300, 100);
+            rect(x, y * 3 + 50, 300, 100);
+            //constantly show the numbers
+            fill(0);
+            textSize(70);
+            text(num1 + "*" + num2, x - 70, y + 25);
+            text(num3 + "*" + num4, x - 70, y + 180);
+            text("EQUAL", x - 110, y * 3.5);
+            //detect when time is gets to zero and changes to a blackscreeen
+            if (s < 0) {
+                background(0);
+                sChange = 0;
+                //to show the score on the blackscreen
+                fill(255);
+                text("Points: " + point, width / 2 - 100, height / 2);
+                //tells you to play again after pressing ENTER
+                textSize(20);
+                text("Press ENTER to play again", width / 2 - 90, height / 2 + 100);
+            }
+        }
+        //detect if you clicked into the rectangle and if you are right or wrong
+        function mousePressed() {
+            if (mouseX > x - 150 && mouseX < x + 150 && mouseY > y - 50 && mouseY < y + 50) {
+                if (num1 * num2 > num3 * num4) {
+                    point++;
+                    refresh(); //recall the function
+                }
+                else {
+                    point--;
+                    refresh();
+                }
+            }
+            else if (mouseX > x - 150 && mouseX < x + 150 && mouseY > y * 2 - 50 && mouseY < y * 2 + 50) {
+                if (num1 * num2 < num3 * num4) {
+                    point++;
+                    refresh();
+                }
+                else {
+                    point--;
+                    refresh();
+                }
+            }
+            else if (mouseX > x - 150 && mouseX < x + 150 && mouseY > y * 3 && mouseY < y * 3 + 100) {
+                if (num1 * num2 == num3 * num4) {
+                    point++;
+                    refresh();
+                }
+                else {
+                    point--;
+                    refresh();
+                }
+            }
+        }
+        //the reset button
+        function keyPressed() {
+            if (keyCode == ENTER) {
+                setup();
+                background(200);
+            }
+        }
+    </script>
+</head>
+
+<div id="code" class="container-fluid">
+    <script src="https://gist-it.appspot.com/github/wilsonz8427/p5js/blob/master/conditionals-project.html?footer=0"></script>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script>
+    $(window).bind("load", function() {
+        $('#code').before($('#defaultCanvas0').remove());
+    });
+</script>
+
+</html>
