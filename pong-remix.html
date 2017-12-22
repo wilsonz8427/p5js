@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>Pong</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.13/p5.js"></script>
+    <script>
+        //makes variables and set some of them
+        var ballX; //ball X postiion
+        var ballY; //ball Y postion
+        //ball speed
+        var ballSpeedX = 5; 
+        var ballSpeedY = 5;
+        var paddleHeight = 30; 
+        var score = 0; 
+        var lives = 3;
+        var paused;
+        var rmx; 
+
+        function setup() {
+            createCanvas(800, 600);
+            noCursor(); //makes it so then when cursor goes into the game in does not show
+            ballX = random(width); //makes it so then the ball appears between 0 or the end of the screen(right)
+            ballY = random(height / 2); //make the ball appear between 0 or half of the screen(the y coord)
+            paused = false; //set pause as false
+        }
+
+        function draw() {
+            background(128);
+            //text for Score and lives
+            textSize(20);
+            fill(0);
+            text("Score: " + score, 50, 50);
+            text("Lives left: " + lives, 50, 70);
+            fill(255);
+            //The functions
+            moveBall(); //calls the function that moves the ball
+            checkCollide(); //calls the function that check if the ball has touched something(walls or paddle)
+            drawPaddle(); //calls the function that draws the paddle
+            drawBall(); //calls the function that draws the ball
+
+        }
+
+        function moveBall() { // the function of that moves the ball
+            if (!paused) { //if it is not pause so it will ativatave the code below
+                rmx = mouseX; //remebers the mouse the paddle's position after paused
+                ballX = ballX + ballSpeedX; //left or right movement
+                ballY = ballY + ballSpeedY; //up or down movement
+            }
+            else{ //if pause is false
+                //say the two line of text when paused
+                background(0);
+                fill(255);
+                textAlign(CENTER);
+                text("PAUSED", width / 2, height / 2); 
+                text("Press P again to play again", width / 2, (height / 2) + 30);
+                fill(0);
+            }
+            //see the speed of the ball(both x and y) in the console
+            console.log("ballSpeedX: " + ballSpeedX +
+                ", ballSpeedY: " + ballSpeedY);
+        }
+
+        function checkCollide() { //check if the ball has touch the something(walls or paddle)
+            if (ballX < 0 || ballX > width) { //check if the ball touches the left or right wall
+                ballSpeedX = ballSpeedX * -1; //make the ball changes directions(from left to right or vise versa) when touches the left or right wall
+            }
+            if (ballY < 0) { //check if the ball touched the celing
+                ballSpeedY = ballSpeedY * -1; //change the ball (from up to down)
+            }
+            if (ballY > height - paddleHeight) { //check if the ball is on the height of the paddle
+                if (ballX > mouseX && ballX < mouseX + 200) { //check if the ball has touch the paddle
+                    ballSpeedY = ballSpeedY * -1; //change the direction(down to up)
+                    
+                    /*this checks where the ball hits the paddle and put it with the speed 
+                    ex.if the ball hits the paddle on the left side the ball moves ot the 
+                    left and if the ball hits the right side of the paddle it will go to the right
+                    and if the ball hits the middle of the paddle the ball bounces upwards*/
+                    ballSpeedX = map(ballX, mouseX, mouseX + 200, -5, 5);
+                    
+                    score++;
+                }
+                else { //check if it is not on the paddle
+                    if (lives > 0) { //check if you still have life left
+                        lives--;
+                        ballX = random(width);
+                        ballY = random(height / 3);
+
+                    }
+                    else { //if no more lives then when it passes the paddle it will be GAME OVER
+                        text("GAME OVER!", width / 2, height / 2); //show the text GAME OVER on the middle of the screen
+                        noLoop(); //stops the draw loop
+                    }
+                }
+            }
+        }
+
+        function drawBall() {
+            noStroke(); //gives the ball no stroke
+            ellipse(ballX, ballY, 20, 20); //draws the ball
+        }
+
+        function drawPaddle() {
+            strokeWeight(4); //give the paddle's outline a harder line
+            rect(rmx, height - paddleHeight - 4, 200, paddleHeight); //draws the paddle(rectangle)
+        }
+
+        function keyPressed() {
+            if (keyCode == 80) {  //check if P is pressed
+                paused = !paused; //pause and unpause
+            }
+        }
+    </script>
+</head>
+
+<body>
+<form><input TYPE="button" onClick="history.go(0)" value="Reset"></form>
+    <div id="code" class="container-fluid">
+        <script src="https://gist-it.appspot.com/github/wilsonz8427/p5js/blob/gh-pages/pong-remix.html?footer=0"></script>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script>
+        $(window).bind("load", function() {
+            $('#code').before($('#defaultCanvas0').remove());
+        });
+    </script>
+</body>
+
+
+</html>
